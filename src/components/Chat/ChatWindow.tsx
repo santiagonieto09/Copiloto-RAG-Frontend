@@ -43,17 +43,17 @@ export function ChatWindow({
   }, [messages, isSending]);
 
   return (
-    <div className="flex h-full min-h-[calc(100vh-132px)] flex-col rounded-[2rem] border border-white/80 bg-white/80 shadow-soft backdrop-blur-xl">
-      <div className="border-b border-slate-200/80 px-5 py-4">
+    <div className="flex h-full min-h-[calc(100vh-132px)] flex-col rounded-[2rem] border border-white/80 bg-white/80 shadow-soft backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-soft">
+      <div className="border-b border-slate-200/80 px-5 py-4 dark:border-slate-700">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="font-bold text-slate-950">Chat inteligente</h2>
-                <p className="text-xs text-slate-500">
+                <h2 className="font-bold text-slate-950 dark:text-white">Chat inteligente</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Conversación: {truncateMiddle(sessionId, 36)}
                 </p>
               </div>
@@ -75,10 +75,10 @@ export function ChatWindow({
               }}
               className={`group relative flex h-9 items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
                 isUsingDocuments
-                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-400"
                   : hasDocuments
-                    ? "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
-                    : "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400"
+                    ? "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-white"
+                    : "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600"
               }`}
             >
               <Database className="h-4 w-4" />
@@ -102,10 +102,10 @@ export function ChatWindow({
               type="button"
               onClick={onNewSession}
               aria-label="Nuevo chat"
-              className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700"
+              className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
             >
               <MessageSquarePlus className="h-4 w-4" />
-              <span className="pointer-events-none absolute -top-9 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-[11px] font-medium text-white opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span className="pointer-events-none absolute -top-9 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-[11px] font-medium text-white opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100 dark:bg-slate-700">
                 Nuevo chat
               </span>
             </button>
@@ -113,7 +113,7 @@ export function ChatWindow({
               type="button"
               onClick={() => void onClearSession()}
               aria-label="Limpiar chat"
-              className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700"
+              className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
             >
               <Eraser className="h-4 w-4" />
               <span className="pointer-events-none absolute -top-9 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-[11px] font-medium text-white opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
@@ -130,11 +130,11 @@ export function ChatWindow({
         ))}
 
         {isSending && (
-          <div className="flex items-center gap-3 text-sm text-slate-500">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-950 text-white">
+          <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-950 text-white dark:bg-slate-700 dark:text-slate-200">
               <Sparkles className="h-4 w-4 animate-pulse" />
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
               Analizando y generando respuesta...
             </div>
           </div>
@@ -142,7 +142,7 @@ export function ChatWindow({
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-slate-200/80 p-4">
+      <div className="border-t border-slate-200/80 p-4 dark:border-slate-700">
         <ChatInput disabled={!canSend} isSending={isSending} onSend={onSend} />
       </div>
     </div>

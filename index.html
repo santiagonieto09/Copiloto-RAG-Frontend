@@ -8,6 +8,18 @@
       content="Frontend para el Copiloto Financiero RAG: chat con LLM y panel local de documentos."
     />
     <title>Copiloto Financiero RAG</title>
+    <script>
+      (() => {
+        const theme = localStorage.getItem("theme") || "dark";
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+          document.documentElement.style.colorScheme = "dark";
+        } else {
+          document.documentElement.classList.remove("dark");
+          document.documentElement.style.colorScheme = "light";
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

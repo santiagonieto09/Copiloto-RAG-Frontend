@@ -3,11 +3,12 @@ import { ChatWindow } from "./components/Chat/ChatWindow";
 import { DocumentsPanel } from "./components/Documents/DocumentsPanel";
 import { HealthStatus } from "./components/HealthStatus";
 import { AppShell } from "./components/Layout/AppShell";
+import { ThemeProvider } from "./context/ThemeContext";
 import { useChat } from "./hooks/useChat";
 import { useDocuments } from "./hooks/useDocuments";
 import { useHealth } from "./hooks/useHealth";
 
-function App() {
+function AppContent() {
   const chat = useChat();
   const documents = useDocuments();
   const health = useHealth();
@@ -55,6 +56,14 @@ function App() {
         sessionId={chat.sessionId}
       />
     </AppShell>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

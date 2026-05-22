@@ -14,7 +14,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   return (
     <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
-        <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-950 text-white shadow-sm">
+        <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-950 text-white shadow-sm dark:bg-slate-700 dark:text-slate-200">
           <Bot className="h-4 w-4" />
         </div>
       )}
@@ -23,21 +23,21 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         <div
           className={`rounded-3xl px-4 py-3 shadow-sm ${
             isUser
-              ? "rounded-br-md bg-slate-950 text-white"
+              ? "rounded-br-md bg-slate-950 text-white dark:bg-emerald-600 dark:text-white"
               : message.error
-                ? "rounded-bl-md border border-red-200 bg-red-50 text-red-800"
-                : "rounded-bl-md border border-slate-200 bg-white text-slate-800"
+                ? "rounded-bl-md border border-red-200 bg-red-50 text-red-800 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-400"
+                : "rounded-bl-md border border-slate-200 bg-white text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
           }`}
         >
           <div
-            className={`markdown text-sm leading-7 ${isUser ? "markdown-invert" : ""}`}
+            className={`markdown text-sm leading-7 ${isUser ? "markdown-invert" : "dark:prose-invert"}`}
           >
             <ReactMarkdown>{message.content}</ReactMarkdown>
           </div>
         </div>
 
         <div
-          className={`mt-1 flex flex-wrap gap-2 text-[11px] text-slate-400 ${isUser ? "justify-end" : "justify-start"}`}
+          className={`mt-1 flex flex-wrap gap-2 text-[11px] text-slate-400 dark:text-slate-500 ${isUser ? "justify-end" : "justify-start"}`}
         >
           <span>{formatDateTime(message.timestamp)}</span>
         </div>
@@ -46,7 +46,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       </div>
 
       {isUser && (
-        <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm">
+        <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-sm dark:bg-emerald-600 dark:text-white">
           <UserRound className="h-4 w-4" />
         </div>
       )}
