@@ -1,11 +1,5 @@
 import { useEffect, useRef } from "react";
-import {
-  BrainCircuit,
-  Database,
-  Eraser,
-  MessageSquarePlus,
-  Sparkles,
-} from "lucide-react";
+import { Database, Eraser, MessageSquarePlus, Sparkles } from "lucide-react";
 import type { ChatMessage, ChatMode } from "../../types/api";
 import { truncateMiddle } from "../../utils/format";
 import { ChatInput } from "./ChatInput";
@@ -59,32 +53,31 @@ export function ChatWindow({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex rounded-2xl border border-slate-200 bg-slate-50 p-1">
-              <button
-                type="button"
-                onClick={() => onModeChange("rag")}
-                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition ${
-                  mode === "rag"
-                    ? "bg-white text-emerald-700 shadow-sm"
-                    : "text-slate-500 hover:text-slate-900"
+            <button
+              type="button"
+              role="switch"
+              aria-checked={mode === "rag"}
+              onClick={() => onModeChange(mode === "rag" ? "direct" : "rag")}
+              className={`flex items-center gap-3 rounded-2xl border px-3 py-2 text-xs font-semibold transition ${
+                mode === "rag"
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+              }`}
+            >
+              <Database className="h-4 w-4" />
+              <span>Usar documentos</span>
+              <span
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
+                  mode === "rag" ? "bg-emerald-600" : "bg-slate-300"
                 }`}
               >
-                <Database className="h-4 w-4" />
-                Con documentos
-              </button>
-              <button
-                type="button"
-                onClick={() => onModeChange("direct")}
-                className={`flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold transition ${
-                  mode === "direct"
-                    ? "bg-white text-indigo-700 shadow-sm"
-                    : "text-slate-500 hover:text-slate-900"
-                }`}
-              >
-                <BrainCircuit className="h-4 w-4" />
-                General
-              </button>
-            </div>
+                <span
+                  className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition ${
+                    mode === "rag" ? "translate-x-5" : "translate-x-0.5"
+                  }`}
+                />
+              </span>
+            </button>
 
             <button
               type="button"
