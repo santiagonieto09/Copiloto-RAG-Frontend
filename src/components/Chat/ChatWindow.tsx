@@ -62,7 +62,6 @@ export function ChatWindow({
               role="switch"
               aria-checked={isUsingDocuments}
               aria-label={documentsTooltip}
-              title={documentsTooltip}
               onClick={() => onModeChange(isUsingDocuments ? "direct" : "rag")}
               className={`group relative flex h-9 items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
                 isUsingDocuments
@@ -90,7 +89,6 @@ export function ChatWindow({
             <button
               type="button"
               onClick={onNewSession}
-              title="Nuevo chat"
               aria-label="Nuevo chat"
               className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700"
             >
@@ -102,7 +100,6 @@ export function ChatWindow({
             <button
               type="button"
               onClick={() => void onClearSession()}
-              title="Limpiar chat"
               aria-label="Limpiar chat"
               className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700"
             >
