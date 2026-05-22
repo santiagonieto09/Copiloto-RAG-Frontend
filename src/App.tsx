@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ChatWindow } from "./components/Chat/ChatWindow";
 import { DocumentsPanel } from "./components/Documents/DocumentsPanel";
 import { HealthStatus } from "./components/HealthStatus";
@@ -11,14 +11,24 @@ function App() {
   const chat = useChat();
   const documents = useDocuments();
   const health = useHealth();
-  const hasDocuments = documents.documents.length > 0;
+  const documentCount = documents.documents.length;
+  const hasDocuments = documentCount > 0;
+  const previousDocumentCountRef = useRef(documentCount);
   const { mode, setMode } = chat;
 
   useEffect(() => {
-    if (!hasDocuments && mode === "rag") {
+    const previousDocumentCount = previousDocumentCountRef.current;
+
+    if (documentCount === 0 && mode === "rag") {
       setMode("direct");
     }
-  }, [hasDocuments, mode, setMode]);
+
+    if (documentCount > previousDocumentCount) {
+      setMode("rag");
+    }
+
+    previousDocumentCountRef.current = documentCount;
+  }, [documentCount, mode, setMode]);
 
   return (
     <AppShell
