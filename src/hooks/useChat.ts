@@ -30,7 +30,7 @@ export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>(() => [
     createWelcomeMessage(),
   ]);
-  const [mode, setMode] = useState<ChatMode>("rag");
+  const [mode, setMode] = useState<ChatMode>("direct");
   const [isSending, setIsSending] = useState(false);
 
   const canSend = useMemo(() => !isSending, [isSending]);

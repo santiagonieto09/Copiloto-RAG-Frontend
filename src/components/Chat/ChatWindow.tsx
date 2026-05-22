@@ -7,6 +7,7 @@ import { MessageBubble } from "./MessageBubble";
 
 interface ChatWindowProps {
   canSend: boolean;
+  hasDocuments: boolean;
   isSending: boolean;
   messages: ChatMessage[];
   mode: ChatMode;
@@ -19,6 +20,7 @@ interface ChatWindowProps {
 
 export function ChatWindow({
   canSend,
+  hasDocuments,
   isSending,
   messages,
   mode,
@@ -29,10 +31,12 @@ export function ChatWindow({
   sessionId,
 }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement | null>(null);
-  const isUsingDocuments = mode === "rag";
-  const documentsTooltip = isUsingDocuments
-    ? "Desactivar uso de documentos"
-    : "Activar uso de documentos";
+  const isUsingDocuments = hasDocuments && mode === "rag";
+  const documentsTooltip = !hasDocuments
+    ? "Sube un documento para activar esta opción"
+    : isUsingDocuments
+      ? "Desactivar uso de documentos"
+      : "Activar uso de documentos";
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -61,12 +65,20 @@ export function ChatWindow({
               type="button"
               role="switch"
               aria-checked={isUsingDocuments}
+              aria-disabled={!hasDocuments}
               aria-label={documentsTooltip}
-              onClick={() => onModeChange(isUsingDocuments ? "direct" : "rag")}
+              onClick={() => {
+                if (!hasDocuments) {
+                  return;
+                }
+                onModeChange(isUsingDocuments ? "direct" : "rag");
+              }}
               className={`group relative flex h-9 items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
                 isUsingDocuments
                   ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                  : hasDocuments
+                    ? "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                    : "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400"
               }`}
             >
               <Database className="h-4 w-4" />
