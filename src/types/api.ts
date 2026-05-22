@@ -1,6 +1,6 @@
-export type ChatMode = 'rag' | 'direct';
+export type ChatMode = "rag" | "direct";
 
-export type DocumentType = 'pdf' | 'txt' | 'docx';
+export type DocumentType = "pdf" | "txt" | "docx";
 
 export interface SourceDocument {
   content: string;
@@ -24,7 +24,7 @@ export interface ChatResponse {
 
 export interface ChatMessage {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: string;
   sources?: SourceDocument[];
@@ -42,18 +42,6 @@ export interface DocumentUploadResponse {
 export interface LocalDocumentRecord extends DocumentUploadResponse {
   id: string;
   uploadedAt: string;
-}
-
-export interface CollectionStats {
-  total_documents: number;
-  collection_name: string;
-}
-
-export interface IngestDirectoryResponse {
-  processed_files: number;
-  total_chunks_created: number;
-  errors: number;
-  details: Array<Record<string, unknown>>;
 }
 
 export interface SessionsResponse {

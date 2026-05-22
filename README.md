@@ -1,6 +1,6 @@
 # Copiloto RAG Frontend
 
-Frontend prototipo para el backend **Copiloto Financiero RAG**.
+Frontend prototipo para el **Copiloto Financiero RAG**.
 
 ## Stack
 
@@ -13,7 +13,7 @@ Frontend prototipo para el backend **Copiloto Financiero RAG**.
 
 ## Requisitos
 
-El backend debe estar corriendo en `http://localhost:8000`.
+El servidor de la API debe estar corriendo en `http://localhost:8000`.
 
 ## Instalación
 
@@ -26,7 +26,7 @@ La app abrirá en `http://localhost:5173`.
 
 ## Configuración
 
-Puedes cambiar la URL del backend creando un archivo `.env`:
+Puedes cambiar la URL del servidor creando un archivo `.env`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:8000
@@ -34,10 +34,9 @@ VITE_API_BASE_URL=http://localhost:8000
 
 ## Funcionalidades
 
-- Chat con RAG usando `/api/v1/chat`.
-- Chat directo usando `/api/v1/chat/direct`.
+- Chat con documentos usando `/api/v1/chat`.
+- Chat general usando `/api/v1/chat/direct`.
 - Subida de documentos `.pdf`, `.txt`, `.docx`.
-- Panel de documentos guardado en `localStorage`.
-- Estadísticas desde `/api/v1/documents/stats`.
-- Health check desde `/api/v1/health`.
-- Limpieza de documentos indexados y del panel local.
+- Lista de documentos guardada en el navegador para el prototipo.
+- Estado del asistente usando `/api/v1/health`.
+- Opción para eliminar los documentos preparados para el chat.
