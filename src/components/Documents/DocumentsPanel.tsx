@@ -43,6 +43,7 @@ export function DocumentsPanel({
   const handleClearAll = async () => {
     try {
       await clearAllDocuments();
+      setNotificationMessage("Los documentos fueron eliminados correctamente.");
       setIsConfirmDialogOpen(false);
     } catch {
       setIsConfirmDialogOpen(false);
