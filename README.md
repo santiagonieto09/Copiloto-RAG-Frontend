@@ -24,14 +24,6 @@ npm run dev
 
 La app abrirá en `http://localhost:5173`.
 
-## Configuración
-
-Puedes cambiar la URL del servidor creando un archivo `.env`:
-
-```env
-VITE_API_BASE_URL=http://localhost:8000
-```
-
 ## Funcionalidades
 
 - Chat con documentos usando `/api/v1/chat`.
