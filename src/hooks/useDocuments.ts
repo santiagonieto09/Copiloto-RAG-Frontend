@@ -72,16 +72,6 @@ export function useDocuments() {
     [documents, persistDocuments],
   );
 
-  const removeLocalDocument = useCallback(
-    (documentId: string) => {
-      const nextDocuments = documents.filter(
-        (document) => document.id !== documentId,
-      );
-      persistDocuments(nextDocuments);
-    },
-    [documents, persistDocuments],
-  );
-
   const clearAllDocuments = useCallback(async () => {
     setIsClearing(true);
     setError(null);
@@ -107,7 +97,6 @@ export function useDocuments() {
     error,
     isClearing,
     isUploading,
-    removeLocalDocument,
     uploadDocument,
   };
 }

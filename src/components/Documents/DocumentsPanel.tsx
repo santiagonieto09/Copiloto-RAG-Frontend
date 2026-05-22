@@ -9,7 +9,6 @@ interface DocumentsPanelProps {
   error: string | null;
   isClearing: boolean;
   isUploading: boolean;
-  removeLocalDocument: (documentId: string) => void;
   uploadDocument: (file: File) => Promise<LocalDocumentRecord>;
 }
 
@@ -19,7 +18,6 @@ export function DocumentsPanel({
   error,
   isClearing,
   isUploading,
-  removeLocalDocument,
   uploadDocument,
 }: DocumentsPanelProps) {
   const handleClearAll = async () => {
@@ -95,16 +93,6 @@ export function DocumentsPanel({
                         {formatDateTime(document.uploadedAt)}
                       </p>
                     </div>
-
-                    <button
-                      type="button"
-                      onClick={() => removeLocalDocument(document.id)}
-                      className="rounded-full p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-600"
-                      title="Quitar de la lista visible"
-                      aria-label={`Quitar ${document.filename} de la lista visible`}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
                   </div>
                 </article>
               ))}
