@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Database, Eraser, MessageSquarePlus, Sparkles } from "lucide-react";
 import type { ChatMessage, ChatMode } from "../../types/api";
 import { truncateMiddle } from "../../utils/format";
+import { Tooltip } from "../UI/Tooltip";
 import { ChatInput } from "./ChatInput";
 import { MessageBubble } from "./MessageBubble";
 
@@ -61,65 +62,63 @@ export function ChatWindow({
           </div>
 
           <div className="flex shrink-0 items-center justify-end gap-2">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={isUsingDocuments}
-              aria-disabled={!hasDocuments}
-              aria-label={documentsTooltip}
-              onClick={() => {
-                if (!hasDocuments) {
-                  return;
-                }
-                onModeChange(isUsingDocuments ? "direct" : "rag");
-              }}
-              className={`group relative flex h-9 items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
-                isUsingDocuments
-                  ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-400"
-                  : hasDocuments
-                    ? "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-white"
-                    : "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600"
-              }`}
-            >
-              <Database className="h-4 w-4" />
-              <span
-                className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                  isUsingDocuments ? "bg-emerald-600" : "bg-slate-300"
+            <Tooltip text={documentsTooltip}>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isUsingDocuments}
+                aria-disabled={!hasDocuments}
+                aria-label={documentsTooltip}
+                onClick={() => {
+                  if (!hasDocuments) {
+                    return;
+                  }
+                  onModeChange(isUsingDocuments ? "direct" : "rag");
+                }}
+                className={`flex h-9 items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
+                  isUsingDocuments
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-400"
+                    : hasDocuments
+                      ? "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-white"
+                      : "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600"
                 }`}
               >
+                <Database className="h-4 w-4" />
                 <span
-                  className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition ${
-                    isUsingDocuments ? "translate-x-4" : "translate-x-0.5"
+                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
+                    isUsingDocuments ? "bg-emerald-600" : "bg-slate-300"
                   }`}
-                />
-              </span>
-              <span className="pointer-events-none absolute -top-9 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-[11px] font-medium text-white opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
-                {documentsTooltip}
-              </span>
-            </button>
+                >
+                  <span
+                    className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition ${
+                      isUsingDocuments ? "translate-x-4" : "translate-x-0.5"
+                    }`}
+                  />
+                </span>
+              </button>
+            </Tooltip>
 
-            <button
-              type="button"
-              onClick={onNewSession}
-              aria-label="Nuevo chat"
-              className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
-            >
-              <MessageSquarePlus className="h-4 w-4" />
-              <span className="pointer-events-none absolute -top-9 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-[11px] font-medium text-white opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100 dark:bg-slate-700">
-                Nuevo chat
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={() => void onClearSession()}
-              aria-label="Limpiar chat"
-              className="group relative flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
-            >
-              <Eraser className="h-4 w-4" />
-              <span className="pointer-events-none absolute -top-9 left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-2 py-1 text-[11px] font-medium text-white opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
-                Limpiar chat
-              </span>
-            </button>
+            <Tooltip text="Nuevo chat">
+              <button
+                type="button"
+                onClick={onNewSession}
+                aria-label="Nuevo chat"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+              >
+                <MessageSquarePlus className="h-4 w-4" />
+              </button>
+            </Tooltip>
+
+            <Tooltip text="Limpiar chat">
+              <button
+                type="button"
+                onClick={() => void onClearSession()}
+                aria-label="Limpiar chat"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
+              >
+                <Eraser className="h-4 w-4" />
+              </button>
+            </Tooltip>
           </div>
         </div>
       </div>
