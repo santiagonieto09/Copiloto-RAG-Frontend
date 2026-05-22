@@ -6,18 +6,21 @@ import { formatFileSize } from "../../utils/format";
 interface DocumentUploadProps {
   isUploading: boolean;
   onUpload: (file: File) => Promise<LocalDocumentRecord>;
+  onUploadSuccess: (record: LocalDocumentRecord) => void;
 }
 
-export function DocumentUpload({ isUploading, onUpload }: DocumentUploadProps) {
+export function DocumentUpload({
+  isUploading,
+  onUpload,
+  onUploadSuccess,
+}: DocumentUploadProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const selectFile = (file: File | null) => {
     setSelectedFile(file);
-    setStatusMessage(null);
     setError(null);
   };
 
@@ -39,9 +42,7 @@ export function DocumentUpload({ isUploading, onUpload }: DocumentUploadProps) {
 
     try {
       const record = await onUpload(selectedFile);
-      setStatusMessage(
-        `${record.filename} quedó listo para consultar en el chat.`,
-      );
+      onUploadSuccess(record);
       setSelectedFile(null);
       if (inputRef.current) {
         inputRef.current.value = "";
@@ -112,12 +113,6 @@ export function DocumentUpload({ isUploading, onUpload }: DocumentUploadProps) {
           {error}
         </p>
       )}
-      {statusMessage && (
-        <p className="mt-3 rounded-2xl bg-emerald-50 p-3 text-sm text-emerald-700">
-          {statusMessage}
-        </p>
-      )}
-
       <button
         type="button"
         onClick={() => void handleUpload()}

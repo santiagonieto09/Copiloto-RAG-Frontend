@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import { Archive, FileText, Trash2 } from "lucide-react";
 import type { LocalDocumentRecord } from "../../types/api";
 import { formatDateTime, truncateMiddle } from "../../utils/format";
+import { ConfirmDialog } from "../UI/ConfirmDialog";
+import { Toast } from "../UI/Toast";
 import { DocumentUpload } from "./DocumentUpload";
 
 interface DocumentsPanelProps {
@@ -20,19 +23,59 @@ export function DocumentsPanel({
   isUploading,
   uploadDocument,
 }: DocumentsPanelProps) {
-  const handleClearAll = async () => {
-    const shouldClear = window.confirm(
-      "Esto eliminará los documentos preparados para el chat y limpiará esta lista. ¿Continuar?",
-    );
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState<string | null>(
+    null,
+  );
 
-    if (shouldClear) {
-      await clearAllDocuments();
+  useEffect(() => {
+    if (!notificationMessage) {
+      return;
     }
+
+    const timeoutId = window.setTimeout(() => {
+      setNotificationMessage(null);
+    }, 4500);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [notificationMessage]);
+
+  const handleClearAll = async () => {
+    try {
+      await clearAllDocuments();
+      setIsConfirmDialogOpen(false);
+    } catch {
+      setIsConfirmDialogOpen(false);
+    }
+  };
+
+  const handleUploadSuccess = (record: LocalDocumentRecord) => {
+    setNotificationMessage(
+      `${record.filename} quedó listo para consultar en el chat.`,
+    );
   };
 
   return (
     <div className="space-y-5">
-      <DocumentUpload isUploading={isUploading} onUpload={uploadDocument} />
+      <Toast
+        message={notificationMessage}
+        onClose={() => setNotificationMessage(null)}
+      />
+      <ConfirmDialog
+        confirmLabel="Eliminar"
+        description="Se eliminarán los documentos preparados para el chat. Puedes volver a subirlos cuando quieras."
+        isConfirming={isClearing}
+        isOpen={isConfirmDialogOpen}
+        onCancel={() => setIsConfirmDialogOpen(false)}
+        onConfirm={handleClearAll}
+        title="¿Eliminar documentos?"
+      />
+
+      <DocumentUpload
+        isUploading={isUploading}
+        onUpload={uploadDocument}
+        onUploadSuccess={handleUploadSuccess}
+      />
 
       <section className="rounded-[2rem] border border-white/80 bg-white/80 p-5 shadow-soft backdrop-blur-xl">
         <div className="flex items-start justify-between gap-3">
@@ -101,7 +144,7 @@ export function DocumentsPanel({
             <div className="mt-4 grid gap-2">
               <button
                 type="button"
-                onClick={() => void handleClearAll()}
+                onClick={() => setIsConfirmDialogOpen(true)}
                 disabled={isClearing}
                 className="flex items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
               >
