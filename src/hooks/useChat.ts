@@ -13,7 +13,7 @@ function createWelcomeMessage(): ChatMessage {
     id: createId("message"),
     role: "assistant",
     content:
-      "Hola, soy tu copiloto financiero. Puedes preguntarme sobre regulaciones, auditoría, compliance, riesgos, productos financieros o documentos que hayas cargado.",
+      "Hola, soy tu copiloto financiero. Puedes preguntarme sobre regulaciones, auditoría, riesgos, productos financieros o documentos que hayas cargado.",
     timestamp: new Date().toISOString(),
   };
 }
