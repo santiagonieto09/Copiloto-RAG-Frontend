@@ -11,11 +11,13 @@ Frontend prototipo para el **Copiloto Financiero RAG**.
 - react-markdown
 - lucide-react
 
-## Requisitos
+## Desarrollo Local
+
+### Requisitos
 
 El servidor de la API debe estar corriendo en `http://localhost:8000`.
 
-## Instalación
+### Instalación
 
 ```bash
 npm install
