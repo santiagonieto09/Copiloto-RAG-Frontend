@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { clearSession, sendChatMessage } from "../api/client";
 import type { ChatMessage, ChatMode } from "../types/api";
 import {
@@ -32,6 +32,7 @@ export function useChat() {
   ]);
   const [mode, setMode] = useState<ChatMode>("direct");
   const [isSending, setIsSending] = useState(false);
+  const requestVersionRef = useRef(0);
 
   const canSend = useMemo(() => !isSending, [isSending]);
 
@@ -52,9 +53,15 @@ export function useChat() {
 
       setMessages((currentMessages) => [...currentMessages, userMessage]);
       setIsSending(true);
+      const requestVersion = requestVersionRef.current;
 
       try {
         const response = await sendChatMessage(cleanQuestion, sessionId, mode);
+
+        if (requestVersionRef.current !== requestVersion) {
+          return;
+        }
+
         storeSessionId(response.session_id);
         setSessionId(response.session_id);
 
@@ -72,6 +79,10 @@ export function useChat() {
           assistantMessage,
         ]);
       } catch (error) {
+        if (requestVersionRef.current !== requestVersion) {
+          return;
+        }
+
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -88,16 +99,20 @@ export function useChat() {
           },
         ]);
       } finally {
-        setIsSending(false);
+        if (requestVersionRef.current === requestVersion) {
+          setIsSending(false);
+        }
       }
     },
     [isSending, mode, sessionId],
   );
 
   const startNewSession = useCallback(() => {
+    requestVersionRef.current += 1;
     const nextSessionId = resetStoredSessionId();
     setSessionId(nextSessionId);
     setMessages([createWelcomeMessage()]);
+    setIsSending(false);
   }, []);
 
   const clearCurrentSession = useCallback(async () => {

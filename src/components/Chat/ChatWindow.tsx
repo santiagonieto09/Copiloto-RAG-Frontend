@@ -33,7 +33,9 @@ export function ChatWindow({
 }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const isUsingDocuments = hasDocuments && mode === "rag";
-  const documentsTooltip = !hasDocuments
+  const documentsTooltip = isSending
+    ? "Espera a que termine la respuesta"
+    : !hasDocuments
     ? "Sube un documento para activar esta opción"
     : isUsingDocuments
       ? "Desactivar uso de documentos"
@@ -67,10 +69,10 @@ export function ChatWindow({
                 type="button"
                 role="switch"
                 aria-checked={isUsingDocuments}
-                aria-disabled={!hasDocuments}
+                aria-disabled={!hasDocuments || isSending}
                 aria-label={documentsTooltip}
                 onClick={() => {
-                  if (!hasDocuments) {
+                  if (!hasDocuments || isSending) {
                     return;
                   }
                   onModeChange(isUsingDocuments ? "direct" : "rag");
@@ -78,7 +80,7 @@ export function ChatWindow({
                 className={`flex h-9 items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
                   isUsingDocuments
                     ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-400"
-                    : hasDocuments
+                    : hasDocuments && !isSending
                       ? "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-white"
                       : "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600"
                 }`}
@@ -102,8 +104,9 @@ export function ChatWindow({
               <button
                 type="button"
                 onClick={onNewSession}
+                disabled={isSending}
                 aria-label="Nuevo chat"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
               >
                 <MessageSquarePlus className="h-4 w-4" />
               </button>
@@ -113,8 +116,9 @@ export function ChatWindow({
               <button
                 type="button"
                 onClick={() => void onClearSession()}
+                disabled={isSending}
                 aria-label="Limpiar chat"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
               >
                 <Eraser className="h-4 w-4" />
               </button>
