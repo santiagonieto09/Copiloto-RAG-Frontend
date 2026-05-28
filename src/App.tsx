@@ -13,14 +13,15 @@ function AppContent() {
   const documents = useDocuments();
   const health = useHealth();
   const documentCount = documents.documents.length;
-  const hasDocuments = documentCount > 0;
+  const serverDocumentCount = health.health?.total_documents ?? 0;
+  const hasDocuments = documentCount > 0 || serverDocumentCount > 0;
   const previousDocumentCountRef = useRef(documentCount);
   const { mode, setMode } = chat;
 
   useEffect(() => {
     const previousDocumentCount = previousDocumentCountRef.current;
 
-    if (documentCount === 0 && mode === "rag") {
+    if (!hasDocuments && mode === "rag") {
       setMode("direct");
     }
 
@@ -29,7 +30,18 @@ function AppContent() {
     }
 
     previousDocumentCountRef.current = documentCount;
-  }, [documentCount, mode, setMode]);
+  }, [documentCount, hasDocuments, mode, setMode]);
+
+  const uploadDocument = async (file: File) => {
+    const record = await documents.uploadDocument(file);
+    void health.refreshHealth();
+    return record;
+  };
+
+  const clearAllDocuments = async () => {
+    await documents.clearAllDocuments();
+    void health.refreshHealth();
+  };
 
   return (
     <AppShell
@@ -41,7 +53,13 @@ function AppContent() {
           onRefresh={health.refreshHealth}
         />
       }
-      sidebar={<DocumentsPanel {...documents} />}
+      sidebar={
+        <DocumentsPanel
+          {...documents}
+          clearAllDocuments={clearAllDocuments}
+          uploadDocument={uploadDocument}
+        />
+      }
     >
       <ChatWindow
         canSend={chat.canSend}
