@@ -8,6 +8,10 @@ import { createId, getStoredDocuments, storeDocuments } from "../utils/storage";
 
 const ALLOWED_EXTENSIONS = ["pdf", "txt", "docx"] as const;
 
+type DocumentsUpdate =
+  | LocalDocumentRecord[]
+  | ((currentDocuments: LocalDocumentRecord[]) => LocalDocumentRecord[]);
+
 function getDocumentTypeFromFile(file: File): DocumentType | null {
   const extension = file.name.split(".").pop()?.toLowerCase();
 
@@ -29,9 +33,14 @@ export function useDocuments() {
   const [error, setError] = useState<string | null>(null);
 
   const persistDocuments = useCallback(
-    (nextDocuments: LocalDocumentRecord[]) => {
-      setDocuments(nextDocuments);
-      storeDocuments(nextDocuments);
+    (update: DocumentsUpdate) => {
+      setDocuments((currentDocuments) => {
+        const nextDocuments =
+          typeof update === "function" ? update(currentDocuments) : update;
+
+        storeDocuments(nextDocuments);
+        return nextDocuments;
+      });
     },
     [],
   );
@@ -54,9 +63,7 @@ export function useDocuments() {
           id: createId("document"),
           uploadedAt: new Date().toISOString(),
         };
-        const nextDocuments = [record, ...documents];
-
-        persistDocuments(nextDocuments);
+        persistDocuments((currentDocuments) => [record, ...currentDocuments]);
         return record;
       } catch (requestError) {
         const message =
@@ -69,7 +76,7 @@ export function useDocuments() {
         setIsUploading(false);
       }
     },
-    [documents, persistDocuments],
+    [persistDocuments],
   );
 
   const clearAllDocuments = useCallback(async () => {
