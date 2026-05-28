@@ -2,6 +2,7 @@ export function formatDateTime(value: string): string {
   return new Intl.DateTimeFormat('es-CO', {
     dateStyle: 'medium',
     timeStyle: 'short',
+    timeZone: 'America/Bogota',
   }).format(new Date(value));
 }
 
