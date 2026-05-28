@@ -1,24 +1,34 @@
 import { FormEvent, KeyboardEvent, useState } from "react";
 import { SendHorizonal } from "lucide-react";
 
+const MAX_MESSAGE_LENGTH = 2000;
+
 interface ChatInputProps {
   disabled: boolean;
   isSending: boolean;
   onSend: (message: string) => Promise<void> | void;
 }
 
+function sanitizeMessage(value: string): string {
+  return value
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+    .trim();
+}
+
 export function ChatInput({ disabled, isSending, onSend }: ChatInputProps) {
   const [value, setValue] = useState("");
+  const cleanValue = sanitizeMessage(value);
+  const hasReachedLimit = value.length >= MAX_MESSAGE_LENGTH;
 
   const submit = async () => {
-    const cleanValue = value.trim();
+    const message = sanitizeMessage(value);
 
-    if (!cleanValue || disabled) {
+    if (!message || disabled) {
       return;
     }
 
     setValue("");
-    await onSend(cleanValue);
+    await onSend(message);
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -43,13 +53,14 @@ export function ChatInput({ disabled, isSending, onSend }: ChatInputProps) {
           value={value}
           onChange={(event) => setValue(event.target.value)}
           onKeyDown={handleKeyDown}
+          maxLength={MAX_MESSAGE_LENGTH}
           placeholder="Pregunta sobre tus documentos, regulaciones o análisis financiero..."
           className="max-h-28 min-h-[44px] flex-1 resize-none rounded-xl border-0 bg-slate-50 px-3 py-2.5 text-sm leading-5 text-slate-800 outline-none ring-0 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-emerald-500 dark:bg-slate-700 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:bg-slate-600 dark:focus:ring-emerald-500"
           disabled={disabled}
         />
         <button
           type="submit"
-          disabled={disabled || !value.trim()}
+          disabled={disabled || !cleanValue}
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:disabled:bg-slate-700"
           aria-label="Enviar pregunta"
         >
@@ -58,9 +69,20 @@ export function ChatInput({ disabled, isSending, onSend }: ChatInputProps) {
           />
         </button>
       </div>
-      <p className="px-2 pt-1.5 text-[11px] text-slate-400 dark:text-slate-500">
-        Enter para enviar · Shift + Enter para nueva línea
-      </p>
+      <div className="flex flex-wrap items-center justify-between gap-2 px-2 pt-1.5 text-[11px]">
+        <p className="text-slate-400 dark:text-slate-500">
+          Enter para enviar · Shift + Enter para nueva línea
+        </p>
+        <p
+          className={
+            hasReachedLimit
+              ? "font-semibold text-amber-600 dark:text-amber-400"
+              : "text-slate-400 dark:text-slate-500"
+          }
+        >
+          {value.length}/{MAX_MESSAGE_LENGTH}
+        </p>
+      </div>
     </form>
   );
 }
