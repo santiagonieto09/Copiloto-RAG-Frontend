@@ -137,8 +137,18 @@ export function ChatWindow({
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-950 text-white dark:bg-slate-700 dark:text-slate-200">
               <Sparkles className="h-4 w-4 animate-pulse" />
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
-              Analizando y generando respuesta...
+            <div
+              className="flex items-center gap-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+              aria-label="El bot está escribiendo"
+              role="status"
+            >
+              {[0, 120, 240].map((delay) => (
+                <span
+                  key={delay}
+                  className="h-2 w-2 animate-bounce rounded-full bg-slate-400 dark:bg-slate-300"
+                  style={{ animationDelay: `${delay}ms` }}
+                />
+              ))}
             </div>
           </div>
         )}
