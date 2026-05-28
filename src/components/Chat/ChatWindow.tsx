@@ -46,9 +46,9 @@ export function ChatWindow({
   }, [messages, isSending]);
 
   return (
-    <div className="flex h-full min-h-[calc(100vh-132px)] flex-col rounded-[2rem] border border-white/80 bg-white/80 shadow-soft backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-soft">
-      <div className="border-b border-slate-200/80 px-5 py-4 dark:border-slate-700">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <div className="flex h-full min-h-[calc(100svh-92px)] flex-col rounded-2xl border border-white/80 bg-white/80 shadow-soft backdrop-blur-xl sm:min-h-[calc(100vh-132px)] sm:rounded-[2rem] dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-soft">
+      <div className="border-b border-slate-200/80 px-3 py-3 sm:px-5 sm:py-4 dark:border-slate-700">
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
@@ -127,7 +127,7 @@ export function ChatWindow({
         </div>
       </div>
 
-      <div className="flex-1 space-y-5 overflow-y-auto px-5 py-6">
+      <div className="flex-1 space-y-4 overflow-y-auto px-3 py-4 sm:space-y-5 sm:px-5 sm:py-6">
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}
@@ -145,7 +145,7 @@ export function ChatWindow({
         <div ref={bottomRef} />
       </div>
 
-      <div className="border-t border-slate-200/80 p-4 dark:border-slate-700">
+      <div className="border-t border-slate-200/80 p-3 sm:p-4 dark:border-slate-700">
         <ChatInput disabled={!canSend} isSending={isSending} onSend={onSend} />
       </div>
     </div>
