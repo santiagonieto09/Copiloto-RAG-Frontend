@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Database, Eraser, MessageSquarePlus, Sparkles } from "lucide-react";
+import { Bot, Database, Eraser, MessageSquarePlus, Sparkles } from "lucide-react";
 import type { ChatMessage, ChatMode } from "../../types/api";
 import { truncateMiddle } from "../../utils/format";
 import { Tooltip } from "../UI/Tooltip";
@@ -135,7 +135,7 @@ export function ChatWindow({
         {isSending && (
           <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-950 text-white dark:bg-slate-700 dark:text-slate-200">
-              <Sparkles className="h-4 w-4 animate-pulse" />
+              <Bot className="h-4 w-4" />
             </div>
             <div
               className="flex items-center gap-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-800"
