@@ -48,6 +48,34 @@ export function ChatWindow({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isSending]);
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const isInputFocused = document.activeElement?.tagName === "TEXTAREA" || document.activeElement?.tagName === "INPUT";
+
+      if (event.key === "Escape" && isSending) {
+        event.preventDefault();
+        onCancel();
+        return;
+      }
+
+      if (isInputFocused && (event.ctrlKey || event.metaKey)) {
+        switch (event.key.toLowerCase()) {
+          case "n":
+            event.preventDefault();
+            onNewSession();
+            break;
+          case "l":
+            event.preventDefault();
+            void onClearSession();
+            break;
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isSending, onCancel, onNewSession, onClearSession]);
+
   return (
     <div className="flex h-full min-h-[calc(100svh-92px)] flex-col rounded-2xl border border-white/80 bg-white/80 shadow-soft backdrop-blur-xl sm:min-h-[calc(100vh-132px)] sm:rounded-[2rem] dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-soft">
       <div className="border-b border-slate-200/80 px-3 py-3 sm:px-5 sm:py-4 dark:border-slate-700">
