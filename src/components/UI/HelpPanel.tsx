@@ -9,13 +9,17 @@ export function HelpPanel({ onClose }: HelpPanelProps) {
   const dialogRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    document.body.style.overflow = "hidden";
     const timer = setTimeout(() => dialogRef.current?.focus(), 50);
-    return () => clearTimeout(timer);
+    return () => {
+      document.body.style.overflow = "";
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/45 p-4 backdrop-blur-sm sm:items-center dark:bg-slate-950/75"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm dark:bg-slate-950/75"
       onKeyDown={(event) => {
         if (event.key === "Escape") {
           event.stopPropagation();
@@ -29,9 +33,9 @@ export function HelpPanel({ onClose }: HelpPanelProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="help-dialog-title"
-        className="w-full max-w-lg rounded-[2rem] border border-white/70 bg-white p-6 shadow-soft outline-none dark:border-slate-700 dark:bg-slate-800"
+        className="flex max-h-[90vh] w-full max-w-lg flex-col rounded-[2rem] border border-white/70 bg-white shadow-soft outline-none dark:border-slate-700 dark:bg-slate-800"
       >
-        <div className="mb-6 flex items-start justify-between gap-3">
+        <div className="flex shrink-0 items-start justify-between gap-3 px-6 pb-4 pt-6">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
               <BookOpen className="h-5 w-5" />
@@ -48,14 +52,14 @@ export function HelpPanel({ onClose }: HelpPanelProps) {
           <button
             type="button"
             onClick={onClose}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-red-200 hover:text-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
             aria-label="Cerrar ayuda"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-4 overflow-y-auto px-6 pb-6">
           <div className="flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-700/50">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-200 text-slate-700 dark:bg-slate-600 dark:text-slate-300">
               <Bot className="h-5 w-5" />
@@ -103,11 +107,11 @@ export function HelpPanel({ onClose }: HelpPanelProps) {
               </p>
             </div>
           </div>
-        </div>
 
-        <p className="mt-5 text-center text-xs text-slate-400 dark:text-slate-500">
-          Los documentos se almacenan localmente en tu navegador. Puedes eliminarlos cuando quieras desde el panel lateral.
-        </p>
+          <p className="pt-2 text-center text-xs text-slate-400 dark:text-slate-500">
+            Los documentos se almacenan localmente en tu navegador. Puedes eliminarlos cuando quieras desde el panel lateral.
+          </p>
+        </div>
       </section>
     </div>
   );
