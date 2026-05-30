@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Bot, Database, Eraser, MessageSquarePlus } from "lucide-react";
+import { BookOpen, Bot, Database, Eraser, MessageSquarePlus, Square } from "lucide-react";
 import type { ChatMessage, ChatMode } from "../../types/api";
 import { Tooltip } from "../UI/Tooltip";
 import { ChatInput } from "./ChatInput";
@@ -12,6 +12,7 @@ interface ChatWindowProps {
   isSending: boolean;
   messages: ChatMessage[];
   mode: ChatMode;
+  onCancel: () => void;
   onClearSession: () => Promise<void> | void;
   onModeChange: (mode: ChatMode) => void;
   onNewSession: () => void;
@@ -25,6 +26,7 @@ export function ChatWindow({
   isSending,
   messages,
   mode,
+  onCancel,
   onClearSession,
   onModeChange,
   onNewSession,
@@ -162,6 +164,15 @@ export function ChatWindow({
                 />
               ))}
             </div>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex h-9 items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 text-xs font-semibold text-red-700 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+              aria-label="Detener generación"
+            >
+              <Square className="h-3.5 w-3.5" />
+              Detener
+            </button>
           </div>
         )}
         <div ref={bottomRef} />

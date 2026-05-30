@@ -57,15 +57,19 @@ export async function sendChatMessage(
   question: string,
   sessionId: string | null,
   mode: ChatMode,
+  signal?: AbortSignal,
 ): Promise<ChatResponse> {
   try {
     const endpoint = mode === "rag" ? "/api/v1/chat" : "/api/v1/chat/direct";
     const { data } = await apiClient.post<ChatResponse>(endpoint, {
       question,
       session_id: sessionId,
-    });
+    }, { signal });
     return data;
   } catch (error) {
+    if (axios.isCancel(error)) {
+      throw error;
+    }
     throw new Error(getApiErrorMessage(error));
   }
 }

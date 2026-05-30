@@ -67,6 +67,7 @@ function AppContent() {
         messages={chat.messages}
         hasDocuments={hasDocuments}
         mode={chat.mode}
+        onCancel={chat.cancel}
         onClearSession={chat.clearCurrentSession}
         onModeChange={chat.setMode}
         onNewSession={chat.startNewSession}

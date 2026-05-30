@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from "react";
+import axios from "axios";
 import { clearSession, sendChatMessage } from "../api/client";
 import type { ChatMessage, ChatMode } from "../types/api";
 import {
@@ -33,8 +34,20 @@ export function useChat() {
   const [mode, setMode] = useState<ChatMode>("direct");
   const [isSending, setIsSending] = useState(false);
   const requestVersionRef = useRef(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const canSend = useMemo(() => !isSending, [isSending]);
+
+  const cancel = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    if (requestVersionRef.current) {
+      requestVersionRef.current += 1;
+    }
+    setIsSending(false);
+  }, []);
 
   const sendMessage = useCallback(
     async (question: string) => {
@@ -51,12 +64,16 @@ export function useChat() {
         timestamp: new Date().toISOString(),
       };
 
+      abortControllerRef.current?.abort();
+      const abortController = new AbortController();
+      abortControllerRef.current = abortController;
+
       setMessages((currentMessages) => [...currentMessages, userMessage]);
       setIsSending(true);
       const requestVersion = requestVersionRef.current;
 
       try {
-        const response = await sendChatMessage(cleanQuestion, sessionId, mode);
+        const response = await sendChatMessage(cleanQuestion, sessionId, mode, abortController.signal);
 
         if (requestVersionRef.current !== requestVersion) {
           return;
@@ -83,6 +100,14 @@ export function useChat() {
           return;
         }
 
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
+        }
+
+        if (axios.isCancel(error)) {
+          return;
+        }
+
         const errorMessage =
           error instanceof Error
             ? error.message
@@ -102,18 +127,21 @@ export function useChat() {
         if (requestVersionRef.current === requestVersion) {
           setIsSending(false);
         }
+        if (abortControllerRef.current === abortController) {
+          abortControllerRef.current = null;
+        }
       }
     },
     [isSending, mode, sessionId],
   );
 
   const startNewSession = useCallback(() => {
-    requestVersionRef.current += 1;
+    cancel();
     const nextSessionId = resetStoredSessionId();
     setSessionId(nextSessionId);
     setMessages([createWelcomeMessage()]);
     setIsSending(false);
-  }, []);
+  }, [cancel]);
 
   const clearCurrentSession = useCallback(async () => {
     try {
@@ -127,6 +155,7 @@ export function useChat() {
 
   return {
     canSend,
+    cancel,
     clearCurrentSession,
     isSending,
     messages,
