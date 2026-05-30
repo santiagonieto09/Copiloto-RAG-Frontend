@@ -1,4 +1,4 @@
-import { FormEvent, KeyboardEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { SendHorizonal, Square } from "lucide-react";
 
 const MAX_MESSAGE_LENGTH = 2000;
@@ -17,7 +17,14 @@ function sanitizeMessage(value: string): string {
 }
 
 export function ChatInput({ disabled, isSending, onCancel, onSend }: ChatInputProps) {
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    if (!isSending) {
+      textareaRef.current?.focus();
+    }
+  }, [isSending]);
   const cleanValue = sanitizeMessage(value);
   const hasReachedLimit = value.length >= MAX_MESSAGE_LENGTH;
 
@@ -51,6 +58,7 @@ export function ChatInput({ disabled, isSending, onCancel, onSend }: ChatInputPr
     >
       <div className="flex items-end gap-1.5">
         <textarea
+          ref={textareaRef}
           value={value}
           onChange={(event) => setValue(event.target.value)}
           onKeyDown={handleKeyDown}
