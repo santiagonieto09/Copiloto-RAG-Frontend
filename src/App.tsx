@@ -56,6 +56,7 @@ function AppContent() {
       sidebar={
         <DocumentsPanel
           {...documents}
+          uploadProgress={documents.uploadProgress}
           clearAllDocuments={clearAllDocuments}
           uploadDocument={uploadDocument}
         />

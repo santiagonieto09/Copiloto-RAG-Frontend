@@ -29,6 +29,7 @@ export function useDocuments() {
     getStoredDocuments(),
   );
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [isClearing, setIsClearing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,10 +55,11 @@ export function useDocuments() {
       }
 
       setIsUploading(true);
+      setUploadProgress(0);
       setError(null);
 
       try {
-        const response = await uploadDocumentApi(file);
+        const response = await uploadDocumentApi(file, setUploadProgress);
         const record: LocalDocumentRecord = {
           ...response,
           id: createId("document"),
@@ -74,6 +76,7 @@ export function useDocuments() {
         throw new Error(message);
       } finally {
         setIsUploading(false);
+        setUploadProgress(0);
       }
     },
     [persistDocuments],
@@ -104,6 +107,7 @@ export function useDocuments() {
     error,
     isClearing,
     isUploading,
+    uploadProgress,
     uploadDocument,
   };
 }

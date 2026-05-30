@@ -12,6 +12,7 @@ interface DocumentsPanelProps {
   error: string | null;
   isClearing: boolean;
   isUploading: boolean;
+  uploadProgress: number;
   uploadDocument: (file: File) => Promise<LocalDocumentRecord>;
 }
 
@@ -21,6 +22,7 @@ export function DocumentsPanel({
   error,
   isClearing,
   isUploading,
+  uploadProgress,
   uploadDocument,
 }: DocumentsPanelProps) {
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -74,6 +76,7 @@ export function DocumentsPanel({
 
       <DocumentUpload
         isUploading={isUploading}
+        uploadProgress={uploadProgress}
         onUpload={uploadDocument}
         onUploadSuccess={handleUploadSuccess}
       />

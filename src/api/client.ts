@@ -76,6 +76,7 @@ export async function sendChatMessage(
 
 export async function uploadDocument(
   file: File,
+  onProgress?: (progress: number) => void,
 ): Promise<DocumentUploadResponse> {
   try {
     const formData = new FormData();
@@ -84,6 +85,13 @@ export async function uploadDocument(
     const { data } = await apiClient.post<DocumentUploadResponse>(
       "/api/v1/documents/upload",
       formData,
+      {
+        onUploadProgress(progressEvent) {
+          if (onProgress && progressEvent.total) {
+            onProgress(Math.round((progressEvent.loaded / progressEvent.total) * 100));
+          }
+        },
+      },
     );
 
     return data;

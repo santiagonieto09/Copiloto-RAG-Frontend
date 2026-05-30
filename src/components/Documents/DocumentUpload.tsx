@@ -5,12 +5,14 @@ import { formatFileSize } from "../../utils/format";
 
 interface DocumentUploadProps {
   isUploading: boolean;
+  uploadProgress: number;
   onUpload: (file: File) => Promise<LocalDocumentRecord>;
   onUploadSuccess: (record: LocalDocumentRecord) => void;
 }
 
 export function DocumentUpload({
   isUploading,
+  uploadProgress,
   onUpload,
   onUploadSuccess,
 }: DocumentUploadProps) {
@@ -113,6 +115,21 @@ export function DocumentUpload({
           {error}
         </p>
       )}
+
+      {isUploading && (
+        <div className="mt-4 space-y-2">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+            <div
+              className="h-full rounded-full bg-emerald-500 transition-all duration-300 ease-out"
+              style={{ width: `${uploadProgress}%` }}
+            />
+          </div>
+          <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+            {uploadProgress < 100 ? `Subiendo... ${uploadProgress}%` : "Procesando documento..."}
+          </p>
+        </div>
+      )}
+
       <button
         type="button"
         onClick={() => void handleUpload()}
@@ -124,7 +141,7 @@ export function DocumentUpload({
         ) : (
           <UploadCloud className="h-4 w-4" />
         )}
-        {isUploading ? "Preparando documento..." : "Subir documento"}
+        {isUploading ? "Subiendo documento..." : "Subir documento"}
       </button>
     </div>
   );
