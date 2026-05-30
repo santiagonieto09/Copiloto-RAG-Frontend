@@ -15,7 +15,7 @@ export function HelpPanel({ onClose }: HelpPanelProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm dark:bg-slate-950/75"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/45 p-4 backdrop-blur-sm sm:items-center dark:bg-slate-950/75"
       onKeyDown={(event) => {
         if (event.key === "Escape") {
           event.stopPropagation();
