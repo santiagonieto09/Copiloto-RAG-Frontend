@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react";
-import { Bot, Database, Eraser, MessageSquarePlus } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BookOpen, Bot, Database, Eraser, MessageSquarePlus } from "lucide-react";
 import type { ChatMessage, ChatMode } from "../../types/api";
-import { truncateMiddle } from "../../utils/format";
 import { Tooltip } from "../UI/Tooltip";
 import { ChatInput } from "./ChatInput";
 import { MessageBubble } from "./MessageBubble";
+import { HelpPanel } from "../UI/HelpPanel";
 
 interface ChatWindowProps {
   canSend: boolean;
@@ -31,6 +31,7 @@ export function ChatWindow({
   onSend,
   sessionId,
 }: ChatWindowProps) {
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const isUsingDocuments = hasDocuments && mode === "rag";
   const documentsTooltip = isSending
@@ -57,7 +58,7 @@ export function ChatWindow({
               <div>
                 <h2 className="font-bold text-slate-950 dark:text-white">Chat inteligente</h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Conversación: {truncateMiddle(sessionId, 36)}
+                  Consulta tus documentos financieros con IA
                 </p>
               </div>
             </div>
@@ -123,6 +124,17 @@ export function ChatWindow({
                 <Eraser className="h-4 w-4" />
               </button>
             </Tooltip>
+
+            <Tooltip text="Ayuda">
+              <button
+                type="button"
+                onClick={() => setIsHelpOpen(true)}
+                aria-label="Ayuda"
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+              >
+                <BookOpen className="h-4 w-4" />
+              </button>
+            </Tooltip>
           </div>
         </div>
       </div>
@@ -158,6 +170,8 @@ export function ChatWindow({
       <div className="border-t border-slate-200/80 p-3 sm:p-4 dark:border-slate-700">
         <ChatInput disabled={!canSend} isSending={isSending} onSend={onSend} />
       </div>
+
+      {isHelpOpen && <HelpPanel onClose={() => setIsHelpOpen(false)} />}
     </div>
   );
 }
