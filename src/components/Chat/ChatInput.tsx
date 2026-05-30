@@ -1,11 +1,12 @@
 import { FormEvent, KeyboardEvent, useState } from "react";
-import { SendHorizonal } from "lucide-react";
+import { SendHorizonal, Square } from "lucide-react";
 
 const MAX_MESSAGE_LENGTH = 2000;
 
 interface ChatInputProps {
   disabled: boolean;
   isSending: boolean;
+  onCancel: () => void;
   onSend: (message: string) => Promise<void> | void;
 }
 
@@ -15,7 +16,7 @@ function sanitizeMessage(value: string): string {
     .trim();
 }
 
-export function ChatInput({ disabled, isSending, onSend }: ChatInputProps) {
+export function ChatInput({ disabled, isSending, onCancel, onSend }: ChatInputProps) {
   const [value, setValue] = useState("");
   const cleanValue = sanitizeMessage(value);
   const hasReachedLimit = value.length >= MAX_MESSAGE_LENGTH;
@@ -58,16 +59,25 @@ export function ChatInput({ disabled, isSending, onSend }: ChatInputProps) {
           className="max-h-28 min-h-[44px] flex-1 resize-none rounded-xl border-0 bg-slate-50 px-3 py-2.5 text-sm leading-5 text-slate-800 outline-none ring-0 placeholder:text-slate-400 focus:bg-white focus:ring-1 focus:ring-emerald-500 dark:bg-slate-700 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:bg-slate-600 dark:focus:ring-emerald-500"
           disabled={disabled}
         />
-        <button
-          type="submit"
-          disabled={disabled || !cleanValue}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:disabled:bg-slate-700"
-          aria-label="Enviar pregunta"
-        >
-          <SendHorizonal
-            className={`h-4 w-4 ${isSending ? "animate-pulse" : ""}`}
-          />
-        </button>
+        {isSending ? (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-600 text-white transition hover:bg-red-700"
+            aria-label="Detener generación"
+          >
+            <Square className="h-4 w-4" />
+          </button>
+        ) : (
+          <button
+            type="submit"
+            disabled={disabled || !cleanValue}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300 dark:disabled:bg-slate-700"
+            aria-label="Enviar pregunta"
+          >
+            <SendHorizonal className="h-4 w-4" />
+          </button>
+        )}
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2 px-2 pt-1.5 text-[11px]">
         <p className="text-slate-400 dark:text-slate-500">

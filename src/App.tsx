@@ -1,14 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChatWindow } from "./components/Chat/ChatWindow";
 import { DocumentsPanel } from "./components/Documents/DocumentsPanel";
 import { HealthStatus } from "./components/HealthStatus";
 import { AppShell } from "./components/Layout/AppShell";
+import { HelpPanel } from "./components/UI/HelpPanel";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useChat } from "./hooks/useChat";
 import { useDocuments } from "./hooks/useDocuments";
 import { useHealth } from "./hooks/useHealth";
 
 function AppContent() {
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const chat = useChat();
   const documents = useDocuments();
   const health = useHealth();
@@ -44,41 +46,46 @@ function AppContent() {
   };
 
   return (
-    <AppShell
-      healthStatus={
-        <HealthStatus
-          error={health.error}
-          health={health.health}
-          isLoading={health.isLoading}
-          onRefresh={health.refreshHealth}
+    <>
+      <AppShell
+        healthStatus={
+          <HealthStatus
+            error={health.error}
+            health={health.health}
+            isLoading={health.isLoading}
+            onRefresh={health.refreshHealth}
+          />
+        }
+        sidebar={
+          <DocumentsPanel
+            {...documents}
+            uploadProgress={documents.uploadProgress}
+            clearAllDocuments={clearAllDocuments}
+            uploadDocument={uploadDocument}
+          />
+        }
+      >
+        <ChatWindow
+          canSend={chat.canSend}
+          isSending={chat.isSending}
+          messages={chat.messages}
+          hasDocuments={hasDocuments}
+          mode={chat.mode}
+          onCancel={chat.cancel}
+          onClearSession={chat.clearCurrentSession}
+          onDeleteSession={chat.deleteSessionFromHistory}
+          onHelpOpen={() => setIsHelpOpen(true)}
+          onLoadSession={chat.loadSession}
+          onModeChange={chat.setMode}
+          onNewSession={chat.startNewSession}
+          onSend={chat.sendMessage}
+          sessionHistory={chat.sessionHistory}
+          sessionId={chat.sessionId}
         />
-      }
-      sidebar={
-        <DocumentsPanel
-          {...documents}
-          uploadProgress={documents.uploadProgress}
-          clearAllDocuments={clearAllDocuments}
-          uploadDocument={uploadDocument}
-        />
-      }
-    >
-      <ChatWindow
-        canSend={chat.canSend}
-        isSending={chat.isSending}
-        messages={chat.messages}
-        hasDocuments={hasDocuments}
-        mode={chat.mode}
-        onCancel={chat.cancel}
-        onClearSession={chat.clearCurrentSession}
-        onDeleteSession={chat.deleteSessionFromHistory}
-        onLoadSession={chat.loadSession}
-        onModeChange={chat.setMode}
-        onNewSession={chat.startNewSession}
-        onSend={chat.sendMessage}
-        sessionHistory={chat.sessionHistory}
-        sessionId={chat.sessionId}
-      />
-    </AppShell>
+      </AppShell>
+
+      {isHelpOpen && <HelpPanel onClose={() => setIsHelpOpen(false)} />}
+    </>
   );
 }
 

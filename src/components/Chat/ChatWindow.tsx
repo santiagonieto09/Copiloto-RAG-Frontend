@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { BookOpen, Bot, Database, Eraser, MessageSquarePlus, Square } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { BookOpen, Bot, Database, Eraser, MessageSquarePlus } from "lucide-react";
 import type { ChatMessage, ChatMode } from "../../types/api";
 import type { SessionHistoryEntry } from "../../utils/storage";
 import { Tooltip } from "../UI/Tooltip";
 import { ChatInput } from "./ChatInput";
 import { MessageBubble } from "./MessageBubble";
-import { HelpPanel } from "../UI/HelpPanel";
 import { SessionHistory } from "./SessionHistory";
 
 interface ChatWindowProps {
@@ -17,6 +16,7 @@ interface ChatWindowProps {
   onCancel: () => void;
   onClearSession: () => Promise<void> | void;
   onDeleteSession: (id: string) => void;
+  onHelpOpen: () => void;
   onLoadSession: (entry: SessionHistoryEntry) => void;
   onModeChange: (mode: ChatMode) => void;
   onNewSession: () => void;
@@ -34,6 +34,7 @@ export function ChatWindow({
   onCancel,
   onClearSession,
   onDeleteSession,
+  onHelpOpen,
   onLoadSession,
   onModeChange,
   onNewSession,
@@ -41,7 +42,6 @@ export function ChatWindow({
   sessionHistory,
   sessionId,
 }: ChatWindowProps) {
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const isUsingDocuments = hasDocuments && mode === "rag";
   const documentsTooltip = isSending
@@ -172,7 +172,7 @@ export function ChatWindow({
             <Tooltip text="Ayuda">
               <button
                 type="button"
-                onClick={() => setIsHelpOpen(true)}
+                onClick={onHelpOpen}
                 aria-label="Ayuda"
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
               >
@@ -206,25 +206,14 @@ export function ChatWindow({
                 />
               ))}
             </div>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="flex h-9 items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 text-xs font-semibold text-red-700 transition hover:bg-red-100 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
-              aria-label="Detener generación"
-            >
-              <Square className="h-3.5 w-3.5" />
-              Detener
-            </button>
           </div>
         )}
         <div ref={bottomRef} />
       </div>
 
       <div className="border-t border-slate-200/80 p-3 sm:p-4 dark:border-slate-700">
-        <ChatInput disabled={!canSend} isSending={isSending} onSend={onSend} />
+        <ChatInput disabled={!canSend} isSending={isSending} onCancel={onCancel} onSend={onSend} />
       </div>
-
-      {isHelpOpen && <HelpPanel onClose={() => setIsHelpOpen(false)} />}
     </div>
   );
 }
