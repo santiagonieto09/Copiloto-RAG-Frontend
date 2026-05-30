@@ -46,28 +46,30 @@ export function OverflowMenu({
             onClick={close}
             aria-label="Cerrar menú"
           />
-          <div className="absolute right-0 top-full z-40 mt-2 min-w-[280px] max-w-[90vw] origin-top-right rounded-3xl border border-slate-200 bg-white p-2 shadow-soft dark:border-slate-700 dark:bg-slate-800">
+          <div role="menu" className="absolute right-0 top-full z-40 mt-2 min-w-[280px] max-w-[90vw] origin-top-right rounded-3xl border border-slate-200 bg-white p-2 dark:border-slate-700 dark:bg-slate-800">
             <button
+              role="menuitem"
               type="button"
               onClick={() => {
                 onNewSession();
                 close();
               }}
               disabled={isSending}
-              className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-300 dark:hover:bg-slate-700"
+              className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               <MessageSquarePlus className="h-4 w-4" />
               Nuevo chat
             </button>
 
             <button
+              role="menuitem"
               type="button"
               onClick={() => {
                 void onClearSession();
                 close();
               }}
               disabled={isSending}
-              className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-300 dark:hover:bg-slate-700"
+              className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               <Eraser className="h-4 w-4" />
               Limpiar chat
@@ -89,6 +91,7 @@ export function OverflowMenu({
                       className="group flex items-start gap-2 rounded-2xl px-2 py-1.5 transition hover:bg-slate-50 dark:hover:bg-slate-700"
                     >
                       <button
+                        role="menuitem"
                         type="button"
                         onClick={() => {
                           onLoadSession(entry);
@@ -103,15 +106,15 @@ export function OverflowMenu({
                           {entry.messageCount} mensajes · {formatDateTime(entry.updatedAt)}
                         </p>
                       </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteSession(entry.id);
-                        }}
-                        className="mt-0.5 shrink-0 rounded-lg p-1 text-slate-400 opacity-0 transition hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-900/20 dark:hover:text-red-400"
-                        aria-label={`Eliminar conversación: ${entry.preview}`}
-                      >
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteSession(entry.id);
+                      }}
+                      className="mt-0.5 shrink-0 rounded-lg p-1 text-slate-400 opacity-0 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 group-hover:opacity-100 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                      aria-label={`Eliminar conversación: ${entry.preview}`}
+                    >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
                     </div>
@@ -122,12 +125,13 @@ export function OverflowMenu({
 
             <div className="my-1 border-t border-slate-100 dark:border-slate-700" />
             <button
+              role="menuitem"
               type="button"
               onClick={() => {
                 onHelpOpen();
                 close();
               }}
-              className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"
+              className="flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               <BookOpen className="h-4 w-4" />
               Ayuda

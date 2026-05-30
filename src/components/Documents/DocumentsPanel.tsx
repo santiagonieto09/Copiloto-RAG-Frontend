@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Archive, FileText, Trash2 } from "lucide-react";
 import type { LocalDocumentRecord } from "../../types/api";
 import { formatDateTime, truncateMiddle } from "../../utils/format";
-import { ConfirmDialog } from "../UI/ConfirmDialog";
 import { Toast } from "../UI/Toast";
 import { DocumentUpload } from "./DocumentUpload";
+
+const ConfirmDialog = lazy(() => import("../UI/ConfirmDialog").then((m) => ({ default: m.ConfirmDialog })));
 
 interface DocumentsPanelProps {
   clearAllDocuments: () => Promise<void>;
@@ -64,15 +65,17 @@ export function DocumentsPanel({
         message={notificationMessage}
         onClose={() => setNotificationMessage(null)}
       />
-      <ConfirmDialog
-        confirmLabel="Eliminar"
-        description="Se eliminarán los documentos preparados para el chat. Puedes volver a subirlos cuando quieras."
-        isConfirming={isClearing}
-        isOpen={isConfirmDialogOpen}
-        onCancel={() => setIsConfirmDialogOpen(false)}
-        onConfirm={handleClearAll}
-        title="¿Eliminar documentos?"
-      />
+      <Suspense fallback={null}>
+        <ConfirmDialog
+          confirmLabel="Eliminar"
+          description="Se eliminarán los documentos preparados para el chat. Puedes volver a subirlos cuando quieras."
+          isConfirming={isClearing}
+          isOpen={isConfirmDialogOpen}
+          onCancel={() => setIsConfirmDialogOpen(false)}
+          onConfirm={handleClearAll}
+          title="¿Eliminar documentos?"
+        />
+      </Suspense>
 
       <DocumentUpload
         isUploading={isUploading}
@@ -81,7 +84,7 @@ export function DocumentsPanel({
         onUploadSuccess={handleUploadSuccess}
       />
 
-      <section className="rounded-[2rem] border border-white/80 bg-white/80 p-5 shadow-soft backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/80">
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-900">
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
@@ -150,7 +153,7 @@ export function DocumentsPanel({
                 type="button"
                 onClick={() => setIsConfirmDialogOpen(true)}
                 disabled={isClearing}
-                className="flex items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
               >
                 <Trash2 className="h-4 w-4" />
                 {isClearing

@@ -103,6 +103,11 @@
     color: #e2e8f0;
   }
 
+  .dark .markdown pre {
+    background: #1e293b;
+    color: #e2e8f0;
+  }
+
   .markdown pre code {
     background: transparent;
     padding: 0;

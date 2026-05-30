@@ -17,7 +17,7 @@ export function SessionHistory({ sessions, onLoad, onDelete }: SessionHistoryPro
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+        className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-200 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
         aria-label="Historial de conversaciones"
         aria-expanded={isOpen}
       >
@@ -32,7 +32,7 @@ export function SessionHistory({ sessions, onLoad, onDelete }: SessionHistoryPro
             onClick={() => setIsOpen(false)}
             aria-label="Cerrar historial"
           />
-          <div className="absolute right-0 top-full z-40 mt-2 min-w-[280px] max-w-[90vw] origin-top-right rounded-3xl border border-slate-200 bg-white p-3 shadow-soft sm:w-80 dark:border-slate-700 dark:bg-slate-800">
+          <div className="absolute right-0 top-full z-40 mt-2 min-w-[280px] max-w-[90vw] origin-top-right rounded-3xl border border-slate-200 bg-white p-3 sm:w-80 dark:border-slate-700 dark:bg-slate-800">
             <div className="mb-2 flex items-center justify-between px-1">
               <div className="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300">
                 <Clock className="h-4 w-4" />
@@ -76,8 +76,11 @@ export function SessionHistory({ sessions, onLoad, onDelete }: SessionHistoryPro
                     </button>
                     <button
                       type="button"
-                      onClick={() => onDelete(entry.id)}
-                      className="mt-0.5 shrink-0 rounded-lg p-1 text-slate-400 opacity-0 transition hover:bg-red-50 hover:text-red-600 group-hover:opacity-100 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(entry.id);
+                      }}
+                      className="mt-0.5 shrink-0 rounded-lg p-1 text-slate-400 opacity-0 transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 group-hover:opacity-100 dark:hover:bg-red-900/20 dark:hover:text-red-400"
                       aria-label={`Eliminar conversación: ${entry.preview}`}
                     >
                       <Trash2 className="h-3.5 w-3.5" />

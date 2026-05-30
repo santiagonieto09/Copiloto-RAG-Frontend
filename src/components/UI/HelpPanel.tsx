@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { BookOpen, Bot, Database, FileText, Landmark, X } from "lucide-react";
 
 interface HelpPanelProps {
@@ -5,13 +6,30 @@ interface HelpPanelProps {
 }
 
 export function HelpPanel({ onClose }: HelpPanelProps) {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => dialogRef.current?.focus(), 50);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm dark:bg-slate-950/75">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm dark:bg-slate-950/75"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.stopPropagation();
+          onClose();
+        }
+      }}
+    >
       <section
+        ref={dialogRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-labelledby="help-dialog-title"
-        className="w-full max-w-lg rounded-[2rem] border border-white/70 bg-white p-6 shadow-soft dark:border-slate-700 dark:bg-slate-800"
+        className="w-full max-w-lg rounded-[2rem] border border-white/70 bg-white p-6 shadow-soft outline-none dark:border-slate-700 dark:bg-slate-800"
       >
         <div className="mb-6 flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">

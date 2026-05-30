@@ -71,13 +71,21 @@ export function DocumentUpload({
       </div>
 
       <div
+        role="button"
+        tabIndex={0}
         onDragOver={(event) => {
           event.preventDefault();
           setIsDragging(true);
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        className={`mt-4 cursor-pointer rounded-3xl border border-dashed p-5 text-center transition ${
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            inputRef.current?.click();
+          }
+        }}
+        className={`mt-4 cursor-pointer rounded-3xl border border-dashed p-5 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
           isDragging
             ? "border-emerald-400 bg-emerald-50 dark:border-emerald-600/50 dark:bg-emerald-900/20"
             : "border-slate-300 bg-slate-50 hover:border-emerald-300 hover:bg-emerald-50/60 dark:border-slate-600 dark:bg-slate-700/50 dark:hover:border-emerald-600/50 dark:hover:bg-emerald-900/20"
@@ -120,8 +128,8 @@ export function DocumentUpload({
         <div className="mt-4 space-y-2">
           <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
             <div
-              className="h-full rounded-full bg-emerald-500 transition-all duration-300 ease-out"
-              style={{ width: `${uploadProgress}%` }}
+              className="h-full origin-left rounded-full bg-emerald-500 transition-transform duration-300 ease-out"
+              style={{ transform: `scaleX(${uploadProgress / 100})` }}
             />
           </div>
           <p className="text-center text-xs text-slate-500 dark:text-slate-400">
@@ -134,7 +142,7 @@ export function DocumentUpload({
         type="button"
         onClick={() => void handleUpload()}
         disabled={isUploading || !selectedFile}
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 dark:disabled:bg-slate-700"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 dark:disabled:bg-slate-700"
       >
         {isUploading ? (
           <Loader2 className="h-4 w-4 animate-spin" />

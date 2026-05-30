@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
 import type { SourceDocument } from '../../types/api';
 import { truncateMiddle } from '../../utils/format';
@@ -9,7 +9,7 @@ interface SourcesPanelProps {
 
 const CONTENT_CHAR_THRESHOLD = 200;
 
-function SourceCard({ source, index }: { source: SourceDocument; index: number }) {
+const SourceCard = memo(function SourceCard({ source, index }: { source: SourceDocument; index: number }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isLong = source.content.length > CONTENT_CHAR_THRESHOLD;
 
@@ -42,7 +42,7 @@ function SourceCard({ source, index }: { source: SourceDocument; index: number }
       )}
     </article>
   );
-}
+});
 
 export function SourcesPanel({ sources = [] }: SourcesPanelProps) {
   if (sources.length === 0) {
@@ -58,7 +58,7 @@ export function SourcesPanel({ sources = [] }: SourcesPanelProps) {
 
       <div className="mt-3 space-y-3">
         {sources.map((source, index) => (
-          <SourceCard key={`${source.source}-${index}`} source={source} index={index} />
+          <SourceCard key={`source-${index}`} source={source} index={index} />
         ))}
       </div>
     </details>

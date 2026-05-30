@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ChatWindow } from "./components/Chat/ChatWindow";
 import { DocumentsPanel } from "./components/Documents/DocumentsPanel";
 import { HealthStatus } from "./components/HealthStatus";
 import { AppShell } from "./components/Layout/AppShell";
-import { HelpPanel } from "./components/UI/HelpPanel";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useChat } from "./hooks/useChat";
 import { useDocuments } from "./hooks/useDocuments";
 import { useHealth } from "./hooks/useHealth";
+
+const HelpPanel = lazy(() => import("./components/UI/HelpPanel").then((m) => ({ default: m.HelpPanel })));
 
 function AppContent() {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -84,7 +85,11 @@ function AppContent() {
         />
       </AppShell>
 
-      {isHelpOpen && <HelpPanel onClose={() => setIsHelpOpen(false)} />}
+      {isHelpOpen && (
+        <Suspense fallback={null}>
+          <HelpPanel onClose={() => setIsHelpOpen(false)} />
+        </Suspense>
+      )}
     </>
   );
 }

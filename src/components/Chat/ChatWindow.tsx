@@ -54,8 +54,15 @@ export function ChatWindow({
       : "Activar uso de documentos";
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isSending]);
+    const container = bottomRef.current?.parentElement;
+    if (!container) return;
+
+    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 200;
+
+    if (isNearBottom) {
+      bottomRef.current?.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages.length]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -117,7 +124,7 @@ export function ChatWindow({
                   }
                   onModeChange(isUsingDocuments ? "direct" : "rag");
                 }}
-                className={`flex h-[44px] items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
+                className={`flex h-[44px] items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 ${
                   isUsingDocuments
                     ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-400"
                     : hasDocuments && !isSending
@@ -127,12 +134,12 @@ export function ChatWindow({
               >
                 <Database className="h-4 w-4" />
                 <span
-                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                    isUsingDocuments ? "bg-emerald-600" : "bg-slate-300"
+                  className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+                    isUsingDocuments ? "bg-emerald-600 dark:bg-emerald-500" : "bg-slate-300 dark:bg-slate-600"
                   }`}
                 >
                   <span
-                    className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition ${
+                    className={`inline-block h-4 w-4 rounded-full bg-white transition-transform dark:bg-slate-200 ${
                       isUsingDocuments ? "translate-x-4" : "translate-x-0.5"
                     }`}
                   />
@@ -147,7 +154,7 @@ export function ChatWindow({
                   onClick={onNewSession}
                   disabled={isSending}
                   aria-label="Nuevo chat"
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-200 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
                 >
                   <MessageSquarePlus className="h-4 w-4" />
                 </button>
@@ -159,7 +166,7 @@ export function ChatWindow({
                   onClick={() => void onClearSession()}
                   disabled={isSending}
                   aria-label="Limpiar chat"
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-red-200 hover:text-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
                 >
                   <Eraser className="h-4 w-4" />
                 </button>
@@ -176,7 +183,7 @@ export function ChatWindow({
                   type="button"
                   onClick={onHelpOpen}
                   aria-label="Ayuda"
-                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition-colors hover:border-emerald-200 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
                 >
                   <BookOpen className="h-4 w-4" />
                 </button>
@@ -207,17 +214,14 @@ export function ChatWindow({
               <Bot className="h-4 w-4" />
             </div>
             <div
-              className="flex items-center gap-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
-              aria-label="El bot está escribiendo"
+              className="rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
               role="status"
+              aria-label="El asistente está generando una respuesta"
             >
-              {[0, 120, 240].map((delay) => (
-                <span
-                  key={delay}
-                  className="h-2 w-2 animate-bounce rounded-full bg-slate-400 dark:bg-slate-300"
-                  style={{ animationDelay: `${delay}ms` }}
-                />
-              ))}
+              <p className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                El asistente está generando una respuesta
+              </p>
             </div>
           </div>
         )}
