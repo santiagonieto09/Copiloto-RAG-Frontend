@@ -117,7 +117,7 @@ export function DocumentsPanel({
               {documents.map((document) => (
                 <article
                   key={document.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+                  className="rounded-2xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">

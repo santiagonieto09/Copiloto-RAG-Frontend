@@ -150,7 +150,7 @@ export function ChatWindow({
               <Bot className="h-4 w-4" />
             </div>
             <div
-              className="flex items-center gap-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-800"
+              className="flex items-center gap-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-800"
               aria-label="El bot está escribiendo"
               role="status"
             >

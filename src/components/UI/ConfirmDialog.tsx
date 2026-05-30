@@ -32,7 +32,7 @@ export function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
         aria-describedby="confirm-dialog-description"
-        className="w-full max-w-sm rounded-[1.75rem] border border-white/70 bg-white p-5 shadow-soft dark:border-slate-700 dark:bg-slate-800"
+        className="w-full max-w-sm rounded-3xl border border-white/70 bg-white p-5 shadow-soft dark:border-slate-700 dark:bg-slate-800"
       >
         <div className="flex items-start gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400">
