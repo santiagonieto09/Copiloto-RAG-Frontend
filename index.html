@@ -11,7 +11,12 @@
     <title>Copiloto Financiero RAG</title>
     <script>
       (() => {
-        const theme = localStorage.getItem("theme") || "dark";
+        const stored = localStorage.getItem("theme");
+        const theme = stored === "light" || stored === "dark"
+          ? stored
+          : window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
         if (theme === "dark") {
           document.documentElement.classList.add("dark");
           document.documentElement.style.colorScheme = "dark";

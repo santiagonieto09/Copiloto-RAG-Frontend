@@ -20,7 +20,9 @@ function getInitialTheme(): Theme {
   if (stored === "light" || stored === "dark") {
     return stored;
   }
-  return "dark";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
