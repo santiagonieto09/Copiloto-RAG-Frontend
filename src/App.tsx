@@ -70,9 +70,12 @@ function AppContent() {
         mode={chat.mode}
         onCancel={chat.cancel}
         onClearSession={chat.clearCurrentSession}
+        onDeleteSession={chat.deleteSessionFromHistory}
+        onLoadSession={chat.loadSession}
         onModeChange={chat.setMode}
         onNewSession={chat.startNewSession}
         onSend={chat.sendMessage}
+        sessionHistory={chat.sessionHistory}
         sessionId={chat.sessionId}
       />
     </AppShell>

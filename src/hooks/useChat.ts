@@ -4,8 +4,12 @@ import { clearSession, sendChatMessage } from "../api/client";
 import type { ChatMessage, ChatMode } from "../types/api";
 import {
   createId,
+  getSessionHistory,
   getStoredSessionId,
+  removeSessionFromHistory,
   resetStoredSessionId,
+  saveSessionToHistory,
+  type SessionHistoryEntry,
   storeSessionId,
 } from "../utils/storage";
 
@@ -33,6 +37,9 @@ export function useChat() {
   ]);
   const [mode, setMode] = useState<ChatMode>("direct");
   const [isSending, setIsSending] = useState(false);
+  const [sessionHistory, setSessionHistory] = useState<SessionHistoryEntry[]>(
+    () => getSessionHistory(),
+  );
   const requestVersionRef = useRef(0);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -135,15 +142,26 @@ export function useChat() {
     [isSending, mode, sessionId],
   );
 
+  const loadSession = useCallback((entry: SessionHistoryEntry) => {
+    cancel();
+    setSessionId(entry.id);
+    setMessages(entry.messages);
+    storeSessionId(entry.id);
+  }, [cancel]);
+
   const startNewSession = useCallback(() => {
+    saveSessionToHistory(sessionId, messages);
+    setSessionHistory(getSessionHistory());
     cancel();
     const nextSessionId = resetStoredSessionId();
     setSessionId(nextSessionId);
     setMessages([createWelcomeMessage()]);
     setIsSending(false);
-  }, [cancel]);
+  }, [cancel, messages, sessionId]);
 
   const clearCurrentSession = useCallback(async () => {
+    saveSessionToHistory(sessionId, messages);
+    setSessionHistory(getSessionHistory());
     try {
       await clearSession(sessionId);
     } catch {
@@ -151,17 +169,25 @@ export function useChat() {
     } finally {
       startNewSession();
     }
-  }, [sessionId, startNewSession]);
+  }, [sessionId, startNewSession, messages]);
+
+  const deleteSessionFromHistory = useCallback((entryId: string) => {
+    removeSessionFromHistory(entryId);
+    setSessionHistory(getSessionHistory());
+  }, []);
 
   return {
     canSend,
     cancel,
     clearCurrentSession,
+    deleteSessionFromHistory,
     isSending,
+    loadSession,
     messages,
     mode,
     sendMessage,
     sessionId,
+    sessionHistory,
     setMode,
     startNewSession,
   };

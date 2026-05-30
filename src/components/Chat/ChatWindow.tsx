@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { BookOpen, Bot, Database, Eraser, MessageSquarePlus, Square } from "lucide-react";
 import type { ChatMessage, ChatMode } from "../../types/api";
+import type { SessionHistoryEntry } from "../../utils/storage";
 import { Tooltip } from "../UI/Tooltip";
 import { ChatInput } from "./ChatInput";
 import { MessageBubble } from "./MessageBubble";
 import { HelpPanel } from "../UI/HelpPanel";
+import { SessionHistory } from "./SessionHistory";
 
 interface ChatWindowProps {
   canSend: boolean;
@@ -14,9 +16,12 @@ interface ChatWindowProps {
   mode: ChatMode;
   onCancel: () => void;
   onClearSession: () => Promise<void> | void;
+  onDeleteSession: (id: string) => void;
+  onLoadSession: (entry: SessionHistoryEntry) => void;
   onModeChange: (mode: ChatMode) => void;
   onNewSession: () => void;
   onSend: (message: string) => Promise<void> | void;
+  sessionHistory: SessionHistoryEntry[];
   sessionId: string;
 }
 
@@ -28,9 +33,12 @@ export function ChatWindow({
   mode,
   onCancel,
   onClearSession,
+  onDeleteSession,
+  onLoadSession,
   onModeChange,
   onNewSession,
   onSend,
+  sessionHistory,
   sessionId,
 }: ChatWindowProps) {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
@@ -154,6 +162,12 @@ export function ChatWindow({
                 <Eraser className="h-4 w-4" />
               </button>
             </Tooltip>
+
+            <SessionHistory
+              sessions={sessionHistory}
+              onLoad={onLoadSession}
+              onDelete={onDeleteSession}
+            />
 
             <Tooltip text="Ayuda">
               <button
