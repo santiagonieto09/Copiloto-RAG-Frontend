@@ -49,7 +49,7 @@ export function HealthStatus({
       <button
         type="button"
         onClick={onRefresh}
-        className="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
+        className="rounded-full p-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-50 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
         disabled={isLoading}
         aria-label="Actualizar estado del asistente"
       >

@@ -14,7 +14,7 @@ export function Toast({ message, onClose }: ToastProps) {
     <div
       role="status"
       aria-live="polite"
-      className="fixed right-4 top-24 z-50 flex max-w-sm items-start gap-3 rounded-3xl border border-emerald-100 bg-white p-4 text-sm text-slate-700 shadow-soft dark:border-emerald-900/30 dark:bg-slate-800 dark:text-slate-200"
+      className="fixed bottom-4 left-4 right-4 z-50 flex max-w-sm items-start gap-3 rounded-3xl border border-emerald-100 bg-white p-4 text-sm text-slate-700 shadow-soft sm:bottom-auto sm:left-auto sm:right-4 sm:top-24 dark:border-emerald-900/30 dark:bg-slate-800 dark:text-slate-200"
     >
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
         <CheckCircle2 className="h-5 w-5" />

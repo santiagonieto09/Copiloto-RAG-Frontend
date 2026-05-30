@@ -5,6 +5,7 @@ import type { SessionHistoryEntry } from "../../utils/storage";
 import { Tooltip } from "../UI/Tooltip";
 import { ChatInput } from "./ChatInput";
 import { MessageBubble } from "./MessageBubble";
+import { OverflowMenu } from "./OverflowMenu";
 import { SessionHistory } from "./SessionHistory";
 
 interface ChatWindowProps {
@@ -87,7 +88,7 @@ export function ChatWindow({
   return (
     <div className="flex h-full min-h-[calc(100svh-92px)] flex-col rounded-2xl border border-white/80 bg-white/80 shadow-soft backdrop-blur-xl sm:min-h-[calc(100vh-132px)] sm:rounded-[2rem] dark:border-slate-700 dark:bg-slate-900/80 dark:shadow-soft">
       <div className="border-b border-slate-200/80 px-3 py-3 sm:px-5 sm:py-4 dark:border-slate-700">
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
@@ -116,7 +117,7 @@ export function ChatWindow({
                   }
                   onModeChange(isUsingDocuments ? "direct" : "rag");
                 }}
-                className={`flex h-9 items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
+                className={`flex h-[44px] items-center gap-2 rounded-xl border px-2.5 text-xs font-semibold transition ${
                   isUsingDocuments
                     ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-900/20 dark:text-emerald-400"
                     : hasDocuments && !isSending
@@ -139,46 +140,58 @@ export function ChatWindow({
               </button>
             </Tooltip>
 
-            <Tooltip text="Nuevo chat">
-              <button
-                type="button"
-                onClick={onNewSession}
-                disabled={isSending}
-                aria-label="Nuevo chat"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
-              >
-                <MessageSquarePlus className="h-4 w-4" />
-              </button>
-            </Tooltip>
+            <div className="hidden lg:flex lg:items-center lg:gap-2">
+              <Tooltip text="Nuevo chat">
+                <button
+                  type="button"
+                  onClick={onNewSession}
+                  disabled={isSending}
+                  aria-label="Nuevo chat"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+                >
+                  <MessageSquarePlus className="h-4 w-4" />
+                </button>
+              </Tooltip>
 
-            <Tooltip text="Limpiar chat">
-              <button
-                type="button"
-                onClick={() => void onClearSession()}
-                disabled={isSending}
-                aria-label="Limpiar chat"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
-              >
-                <Eraser className="h-4 w-4" />
-              </button>
-            </Tooltip>
+              <Tooltip text="Limpiar chat">
+                <button
+                  type="button"
+                  onClick={() => void onClearSession()}
+                  disabled={isSending}
+                  aria-label="Limpiar chat"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-red-200 hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-red-900/50 dark:hover:text-red-400"
+                >
+                  <Eraser className="h-4 w-4" />
+                </button>
+              </Tooltip>
 
-            <SessionHistory
-              sessions={sessionHistory}
-              onLoad={onLoadSession}
-              onDelete={onDeleteSession}
+              <SessionHistory
+                sessions={sessionHistory}
+                onLoad={onLoadSession}
+                onDelete={onDeleteSession}
+              />
+
+              <Tooltip text="Ayuda">
+                <button
+                  type="button"
+                  onClick={onHelpOpen}
+                  aria-label="Ayuda"
+                  className="flex h-[44px] w-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
+                >
+                  <BookOpen className="h-4 w-4" />
+                </button>
+              </Tooltip>
+            </div>
+
+            <OverflowMenu
+              isSending={isSending}
+              sessionHistory={sessionHistory}
+              onClearSession={onClearSession}
+              onDeleteSession={onDeleteSession}
+              onHelpOpen={onHelpOpen}
+              onLoadSession={onLoadSession}
+              onNewSession={onNewSession}
             />
-
-            <Tooltip text="Ayuda">
-              <button
-                type="button"
-                onClick={onHelpOpen}
-                aria-label="Ayuda"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:border-emerald-200 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-emerald-900/50 dark:hover:text-emerald-400"
-              >
-                <BookOpen className="h-4 w-4" />
-              </button>
-            </Tooltip>
           </div>
         </div>
       </div>
