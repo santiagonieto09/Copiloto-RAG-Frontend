@@ -23,7 +23,7 @@ export function Toast({ message, onClose }: ToastProps) {
       <button
         type="button"
         onClick={onClose}
-        className="rounded-full p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-700 dark:hover:text-slate-300"
+        className="mt-0.5 self-start rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:text-slate-500 dark:hover:bg-slate-700 dark:hover:text-slate-300"
         aria-label="Cerrar notificación"
       >
         <X className="h-4 w-4" />
